@@ -1,0 +1,37 @@
+name: crud-environment
+# CRUD operations for admin environment
+
+on:
+  workflow_dispatch:    # allow for manual workflow triggering as needed
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  crud:
+    runs-on: windows-latest
+    env:
+      RUNNER_DEBUG: 1
+      WF_USERNAME: sbhalgat@ppdevtools.onmicrosoft.com
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        lfs: true
+
+    - name: create-environment action
+      uses: microsoft/powerplatform-actions/create-environment@7cbffc7
+      id: create-test-pizza
+      with:
+        user-name: ${{ env.WF_USERNAME }}
+        password-secret: ${{ secrets.password }}
+        name: newEnvironment
+        type: Sandbox
+        region: unitedstates
+        domain: test-pizza
+
+    - name: delete-environment action
+      uses: microsoft/powerplatform-actions/delete-environment@7cbffc7
+      with:
+        environment-url: ${{ steps.create-test-pizza.outputs.environment-url }}
+        user-name: ${{ env.WF_USERNAME }}
+        password-secret: ${{ secrets.password }}
