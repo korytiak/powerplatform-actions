@@ -63,6 +63,10 @@ inputs:
   run-asynchronously:
     description: 'Imports solution asynchronously'
     required: false
+    
+  async-wait-time:
+    description: 'Maximum wait time for asynchronous request (default is 60 minutes)'
+    required: false
 
 runs:
   using: 'node12'
