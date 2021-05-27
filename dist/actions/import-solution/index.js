@@ -3509,7 +3509,7 @@ const logger = new lib_1.ActionLogger();
 (() => __awaiter(void 0, void 0, void 0, function* () {
     const pac = new lib_1.PacRunner(workingDir, logger);
     yield new lib_1.AuthHandler(pac).authenticate(lib_1.AuthKind.CDS);
-    const importArgs = ['solution', 'import', '--path', solutionFile];
+    const importArgs = ['solution', 'import', '--path', '--max-async-wait-time 120' solutionFile];
     if (activatePlugins) {
         importArgs.push('--activate-plugins');
     }
