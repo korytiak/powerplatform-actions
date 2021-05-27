@@ -1,0 +1,67 @@
+name: qa-deployment
+
+on:
+  workflow_dispatch:
+
+jobs:
+  dev-to-qa:
+    runs-on: windows-latest
+    env:
+      RUNNER_DEBUG: 1
+    
+    strategy:
+      matrix:
+        solution: [leap_entities, leap_new_security, leap_plugins, LeadOpportunityTranslations]
+        
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        lfs: true
+
+    - name: who-am-i action
+      uses: microsoft/powerplatform-actions/who-am-i@v0
+      with:
+        environment-url: 'https://leap-dev1.crm4.dynamics.com/'
+        user-name: 'skorytia@ford.com'
+        password-secret: ${{ secrets.fpassword }}
+            
+    - name: export unmanaged ${{ matrix.solution }}
+      uses: microsoft/powerplatform-actions/export-solution@v0
+      with:
+        environment-url: 'https://leap-dev1.crm4.dynamics.com/'
+        user-name: 'skorytia@ford.com'
+        password-secret: ${{ secrets.fpassword }}
+        solution-name: ${{ matrix.solution }}
+        solution-output-file: out/solutions/unmanaged/${{ matrix.solution }}.zip
+        run-asynchronously: true
+        
+    - name: export managed ${{ matrix.solution }}
+      uses: microsoft/powerplatform-actions/export-solution@v0
+      with:
+        environment-url: 'https://leap-dev1.crm4.dynamics.com/'
+        user-name: 'skorytia@ford.com'
+        password-secret: ${{ secrets.fpassword }}
+        solution-name: ${{ matrix.solution }}
+        managed: true
+        solution-output-file: out/solutions/managed/${{ matrix.solution }}.zip
+        run-asynchronously: true
+        
+    - name: Import solution to TEST
+      uses: microsoft/powerplatform-actions/import-solution@v0
+      with:
+        environment-url: 'https://org9aee9a6b.crm11.dynamics.com'
+        user-name: 'test@ibm97.onmicrosoft.com'
+        password-secret: 'Change@123'
+        solution-file: out/solutions/managed/${{ matrix.solution }}.zip
+        force-overwrite: true
+        publish-changes: true
+        run-asynchronously: true
+        
+    - name: commit & push to master
+#       if: ${{ matrix.solution == 'leap_processes' }}
+      uses: microsoft/powerplatform-actions/branch-solution@v0
+      with:
+        solution-folder: out/solutions
+        solution-target-folder: solutions
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        allow-empty-commit: true
