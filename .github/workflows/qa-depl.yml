@@ -11,7 +11,7 @@ jobs:
     
     strategy:
       matrix:
-        solution: [leap_entities, leap_new_security, leap_plugins, LeadOpportunityTranslations]
+        solution: [leap_new_security, leap_plugins, LeadOpportunityTranslations]
         
     steps:
     - uses: actions/checkout@v2
