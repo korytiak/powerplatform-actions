@@ -10,9 +10,9 @@ jobs:
       RUNNER_DEBUG: 1
     
     strategy:
+      max-parallel: 1
       matrix:
-        solution: [leap_entities]
-#         solution: [leap_new_security, leap_plugins, LeadOpportunityTranslations]
+        solution: [leap_entities, leap_new_security, leap_plugins, LeadOpportunityTranslations]
         
     steps:
     - uses: actions/checkout@v2
