@@ -49,7 +49,7 @@ jobs:
     - name: Import solution to TEST
       uses: microsoft/powerplatform-actions/import-solution@v0
       with:
-        environment-url: 'https://org9aee9a6b.crm11.dynamics.com'
+        environment-url: 'https://orge45dd1f3.crm11.dynamics.com/'
         user-name: 'test@ibm97.onmicrosoft.com'
         password-secret: 'Change@123'
         solution-file: out/solutions/managed/${{ matrix.solution }}.zip
