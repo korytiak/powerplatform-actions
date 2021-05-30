@@ -12,7 +12,7 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        solution: [leap_processes, leap_entities, leap_new_security, leap_plugins, LeadOpportunityTranslations]
+        solution: [leap_entities, leap_processes, leap_new_security, leap_plugins, LeadOpportunityTranslations]
         
     steps:
     - uses: actions/checkout@v2
@@ -50,9 +50,9 @@ jobs:
     - name: Import solution to TEST
       uses: microsoft/powerplatform-actions/import-solution@v0
       with:
-        environment-url: 'https://org9aee9a6b.crm11.dynamics.com/'
-        user-name: 'test@ibm97.onmicrosoft.com'
-        password-secret: 'Change@123'
+        environment-url: 'https://leap-edu.crm4.dynamics.com/'
+        user-name: 'skorytia@ford.com'
+        password-secret: ${{ secrets.fpassword }}
         solution-file: out/solutions/managed/${{ matrix.solution }}.zip
         force-overwrite: true
         publish-changes: true
